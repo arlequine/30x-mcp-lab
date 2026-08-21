@@ -1,6 +1,7 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { createSession, getSession } from "./auth/session.js";
 import { createPayment } from "./payments.js";
+import { refund } from "./refunds.js";
 
 const PORT = Number(process.env.PORT ?? 3000);
 
@@ -36,8 +37,13 @@ createServer(async (req, res) => {
       const body = await readJson(req);
       return send(res, 201, createPayment(Number(body.amount), body.method as never));
     }
+    if (req.method === "POST" && req.url === "/refunds") {
+      const body = await readJson(req);
+      return send(res, 200, refund(String(body.paymentId)));
+    }
     send(res, 404, { error: "not_found" });
   } catch (err) {
-    send(res, 500, { error: (err as Error).message });
+    const status = (err as { status?: number }).status ?? 500;
+    send(res, status, { error: (err as Error).message });
   }
 }).listen(PORT, () => console.log(`payments-api escuchando en http://localhost:${PORT}`));
