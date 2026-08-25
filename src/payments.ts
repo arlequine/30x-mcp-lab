@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { ValidationError } from "./errors.js";
 import { calcFee, type PaymentMethod } from "./fees.js";
 
 export interface Payment {
@@ -14,6 +15,9 @@ export interface Payment {
 const payments = new Map<string, Payment>();
 
 export function createPayment(amount: number, method: PaymentMethod): Payment {
+  if (!Number.isFinite(amount) || amount <= 0) {
+    throw new ValidationError("amount debe ser un número mayor a 0");
+  }
   const payment: Payment = {
     id: `pay_${randomUUID().slice(0, 8)}`,
     amount,
