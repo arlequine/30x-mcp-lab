@@ -35,7 +35,7 @@ createServer(async (req, res) => {
     }
     if (req.method === "POST" && req.url === "/payments") {
       const body = await readJson(req);
-      return send(res, 201, createPayment(Number(body.amount), body.method as never));
+      return send(res, 201, await createPayment(Number(body.amount), body.method as never));
     }
     if (req.method === "POST" && req.url === "/refunds") {
       const body = await readJson(req);
