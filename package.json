@@ -1,12 +1,13 @@
 {
   "name": "payments-api",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "API de pagos de ejemplo (ficticia) para el lab de 30X AI for Developers",
   "scripts": {
     "start": "tsx src/server.ts",
-    "test": "node --import tsx --test test/*.test.ts"
+    "test": "node --import tsx --test test/*.test.ts",
+    "lint": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
