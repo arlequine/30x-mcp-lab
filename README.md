@@ -13,4 +13,6 @@ npm test
 | Método | Ruta | Descripción |
 |---|---|---|
 | GET | /health | Estado del servicio |
-| POST | /payments | Crea un cargo `{ amount, method }` |
+| POST | /sessions | Inicia sesión `{ userId }` y devuelve un token |
+| POST | /payments | Crea un cargo `{ amount, method }` (requiere `Authorization: Bearer <token>`) |
+| POST | /refunds | Reembolsa un cargo `{ paymentId }` |
