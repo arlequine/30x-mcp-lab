@@ -14,6 +14,11 @@ const FIXED_FEE_MXN: Record<PaymentMethod, number> = {
   oxxo: 10,
 };
 
+/** Redondea a centavos (2 decimales) sin arrastrar errores de punto flotante. */
+export function roundToCents(value: number): number {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+
 export function calcFee(amount: number, method: PaymentMethod): number {
-  return amount * RATES[method] + FIXED_FEE_MXN[method];
+  return roundToCents(amount * RATES[method] + FIXED_FEE_MXN[method]);
 }
