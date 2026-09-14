@@ -39,7 +39,8 @@ createServer(async (req, res) => {
     }
     if (req.method === "POST" && req.url === "/refunds") {
       const body = await readJson(req);
-      return send(res, 200, refund(String(body.paymentId)));
+      const amount = body.amount === undefined ? undefined : Number(body.amount);
+      return send(res, 200, refund(String(body.paymentId), amount));
     }
     send(res, 404, { error: "not_found" });
   } catch (err) {
