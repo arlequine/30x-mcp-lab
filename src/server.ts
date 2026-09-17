@@ -30,12 +30,13 @@ createServer(async (req, res) => {
       const body = await readJson(req);
       return send(res, 201, createSession(String(body.userId)));
     }
-    if (!requireSession(req)) {
+    const session = requireSession(req);
+    if (!session) {
       return send(res, 401, { error: "unauthorized" });
     }
     if (req.method === "POST" && req.url === "/payments") {
       const body = await readJson(req);
-      return send(res, 201, await createPayment(Number(body.amount), body.method as never));
+      return send(res, 201, await createPayment(Number(body.amount), body.method as never, session.userId));
     }
     if (req.method === "POST" && req.url === "/refunds") {
       const body = await readJson(req);
