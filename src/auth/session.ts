@@ -20,6 +20,13 @@ export function createSession(userId: string, now = Date.now()): Session {
   return session;
 }
 
-export function getSession(token: string): Session | undefined {
-  return sessions.get(token);
+export function getSession(token: string, now = Date.now()): Session | undefined {
+  const session = sessions.get(token);
+  if (!session) return undefined;
+  if (session.expiresAt <= now) {
+    // El token expiró: se invalida para que no se pueda reutilizar.
+    sessions.delete(token);
+    return undefined;
+  }
+  return session;
 }
