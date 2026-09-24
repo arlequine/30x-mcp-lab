@@ -15,4 +15,10 @@ npm test
 | GET | /health | Estado del servicio |
 | POST | /sessions | Inicia sesión `{ userId }` y devuelve un token |
 | POST | /payments | Crea un cargo `{ amount, method }` (requiere `Authorization: Bearer <token>`) |
-| POST | /refunds | Reembolsa un cargo `{ paymentId }` |
+| POST | /refunds | Reembolsa un cargo `{ paymentId, amount? }`. Sin `amount` reembolsa el saldo restante |
+
+### Reembolsos
+
+- Se permiten reembolsos **parciales**: la suma de reembolsos nunca puede superar el monto del cargo.
+- Si omites `amount`, se reembolsa lo que quede pendiente.
+- Responde `409` si el cargo ya fue reembolsado por completo.
