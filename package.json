@@ -1,6 +1,6 @@
 {
   "name": "payments-api",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "API de pagos de ejemplo (ficticia) para el lab de 30X AI for Developers",
