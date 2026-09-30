@@ -1,7 +1,8 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { createSession, getSession } from "./auth/session.js";
-import { createPayment } from "./payments.js";
+import { createPayment, listPayments } from "./payments.js";
 import { refund } from "./refunds.js";
+import { reconciliationCsv } from "./reports/reconciliation.js";
 
 const PORT = Number(process.env.PORT ?? 3000);
 
@@ -42,6 +43,11 @@ createServer(async (req, res) => {
       const body = await readJson(req);
       const amount = body.amount === undefined ? undefined : Number(body.amount);
       return send(res, 200, refund(String(body.paymentId), amount));
+    }
+    if (req.method === "GET" && req.url?.startsWith("/reports/reconciliation")) {
+      const day = new URL(req.url, "http://localhost").searchParams.get("day") ?? new Date().toISOString().slice(0, 10);
+      res.writeHead(200, { "content-type": "text/csv" });
+      return res.end(reconciliationCsv(listPayments(), day));
     }
     send(res, 404, { error: "not_found" });
   } catch (err) {
